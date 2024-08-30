@@ -1,0 +1,98 @@
+Installing a Prebuilt RHEL/CentOS/Oracle Linux/AlmaLinux/Rocky Linux Package from the Official NGINX Repository
+Install the prerequisites:
+
+ Copy
+sudo yum install yum-utils
+Set up the yum repository for RHEL/CentOS/Oracle Linux/AlmaLinux/Rocky Linux by creating the file nginx.repo in /etc/yum.repos.d, for example using vi:
+
+ Copy
+sudo vi /etc/yum.repos.d/nginx.repo
+Add the following lines to nginx.repo:
+
+ Copy
+[nginx-stable]
+name=nginx stable repo
+baseurl=http://nginx.org/packages/centos/$releasever/$basearch/
+gpgcheck=1
+enabled=1
+gpgkey=https://nginx.org/keys/nginx_signing.key
+module_hotfixes=true
+
+[nginx-mainline]
+name=nginx mainline repo
+baseurl=http://nginx.org/packages/mainline/centos/$releasever/$basearch/
+gpgcheck=1
+enabled=0
+gpgkey=https://nginx.org/keys/nginx_signing.key
+module_hotfixes=true
+where the stable or mainline element points to the latest stable or mainline version of NGINX Open Source. By default, the repository for stable nginx packages is used. If you would like to use mainline nginx packages, run the following command:
+
+ Copy
+sudo yum-config-manager --enable nginx-stable
+Save the changes and quit vi (press ESC and type wq at the : prompt).
+
+Update the repository:
+
+ Copy
+sudo yum update
+Install the NGINX Open Source package:
+
+ Copy
+sudo yum install nginx
+When prompted to accept the GPG key, verify that the fingerprint matches: 8540 A6F1 8833 A80E 9C16 53A4 2FD2 1310 B49F 6B46, 573B FD6B 3D8F BC64 1079 A6AB ABF5 BD82 7BD9 BF62, 9E9B E90E ACBC DE69 FE9B 204C BCDC D8A3 8D88 A2B3, and if so, accept it.
+
+Start NGINX Open Source:
+
+ Copy
+sudo nginx
+Verify that NGINX Open Source is up and running:
+
+ Copy
+curl -I 127.0.0.1
+HTTP/1.1 200 OK
+Server: nginx/1.27.0
+
+
+====================================================================
+Custom NGINX
+====================================================================
+1. sudo rm /etc/nginx/config.d/default.conf
+2. sudo cp ./config.d/hitradex.conf /etc/nginx/config.d/
+3. sudo cp -r ./cert /etc/nginx/
+4. sudo setsebool -P httpd_can_network_connect 1
+5. verify firewalld
+====================================================================
+
+====================================================================
+SETUP GoAccess
+====================================================================
+sudo subscription-manager repos --enable codeready-builder-for-rhel-8-$(arch)-rpms
+sudo dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+sudo dnf install goaccess
+
+``` Nginx Logs Format that GoAccess can parse
+    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                      '$status $body_bytes_sent "$http_referer" '
+                      '"$http_user_agent" "$upstream_addr" '
+                      '"$http_upgrade" "$connection" ';
+
+    access_log /var/log/nginx/access.log main;
+```
+
+echo "time-format %H:%M:%S" >> /etc/goaccess/goaccess.conf
+echo "date-format %d/%b/%Y" >> /etc/goaccess/goaccess.conf
+echo "log-format ~h{, } %^[%d:%t %^] \"%r\" %s %b \"%R\" \"%u\" " >> /etc/goaccess/goaccess.conf
+
+
+Cmd Line:
+goaccess -f /var/log/nginx/access.log --real-time-html --ws-url=wss://moni.hitradex.com:443/ws -o /var/www/goaccess/index.html --port=7890 --config-file=/etc/goaccess/goaccess.conf -g --origin=https://moni.hitradex.com
+
+mkdir /var/www/goaccess
+sudo chcon -R -t httpd_sys_content_t /var/www/goaccess
+sudo cp goaccess/goaccess.service /usr/lib/systemd/system/
+sudo systemctl start goaccess
+
+
+
+
+EOF
