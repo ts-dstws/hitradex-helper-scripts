@@ -14,7 +14,9 @@ EOL
 }
 
 function run_with_sudo() {
-  sudo bash -c "$(declare -f "$1"); $1"
+  for func_name in "$@"; do
+    sudo bash -c "$(declare -f "$func_name"); $func_name"
+  done
 }
 
 option_install_goaccess() {
@@ -25,8 +27,22 @@ option_install_goaccess() {
     yum install -y goaccess
     mkdir -p /var/www/goaccess
     chcon -R -t httpd_sys_content_t /var/www/goaccess
-    cp ./goaccess.conf /etc/goaccess/
-    cp ./goaccess.service /usr/lib/systemd/system/
+    cat <<'EOF' > /usr/lib/systemd/system/goaccess.service
+[Unit]
+Description=GoAccess real-time web log analysis
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+PIDFile=/var/run/goaccess.pid
+ExecStart=/usr/bin/goaccess --real-time-html --ws-url=ws://moni.hitradex.com:80/ws -o /var/www/goaccess/index.html --port=7890 --config-file=/etc/goaccess/goaccess.conf -g --origin=http://moni.hitradex.com
+ExecStop=/bin/kill -9 ${MAINPID}
+WorkingDirectory=/tmp
+
+[Install]
+WantedBy=multi-user.target
+EOF
     systemctl daemon-reload
     systemctl start goaccess
     systemctl enable goaccess
@@ -38,7 +54,22 @@ option_update_goaccess_config() {
     echo "========= UPDATE GOACCESS CONFIG ============"
 
     systemctl stop goaccess
-    cp ./goaccess.conf /etc/goaccess/
+    cat <<'EOF' > /etc/goaccess/goaccess.conf
+### HITRADEX ###
+# NGINX's log formats below.
+log-file /var/log/nginx/hitradex-access.log
+log-format COMBINED
+time-format %H:%M:%S
+date-format %d/%b/%Y
+# Match with nginx.conf
+log-format %h - %e %^[%d:%t %^] "%r" %s %b "%R" "%u" "%^" %T "%v" "%^" "%^"
+# Prompt log/date configuration window on program start.
+config-dialog false
+# Color highlight active panel.
+hl-header true
+# Ignore request's query string.
+no-query-string true
+EOF
     systemctl start goaccess
     systemctl status goaccess
     
@@ -67,15 +98,15 @@ show_title
 # Menu loop
 while true; do
   echo "Please select an option:"
-  echo "1. Install Nginx"
-  echo "2. Update Nginx Configs"
-  echo "3. Unintall Nginx"
+  echo "1. Install Goaccess"
+  echo "2. Update Goaccess Configs"
+  echo "3. Unintall Goaccess"
   echo "4. EXIT"
   
   read -p "Enter your choice: " choice
   
   case $choice in
-    1) run_with_sudo option_install_goaccess;;
+    1) run_with_sudo option_install_goaccess option_update_goaccess_config ;;
     2) run_with_sudo option_update_goaccess_config ;;
     3) run_with_sudo option_uninstall_goaccess ;;
     4) option_exit;;

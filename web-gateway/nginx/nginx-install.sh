@@ -14,7 +14,9 @@ EOL
 }
 
 function run_with_sudo() {
-  sudo bash -c "$(declare -f "$1"); $1"
+  for func_name in "$@"; do
+    sudo bash -c "$(declare -f "$func_name"); $func_name"
+  done
 }
 
 option_install_nginx() {
