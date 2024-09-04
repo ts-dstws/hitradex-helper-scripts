@@ -30,13 +30,13 @@ option_install_goaccess() {
     cat <<'EOF' > /usr/lib/systemd/system/goaccess.service
 [Unit]
 Description=GoAccess real-time web log analysis
-After=network-online.target
+After=network-online.targe--no-pager t
 Wants=network-online.target
 
 [Service]
 Type=simple
 PIDFile=/var/run/goaccess.pid
-ExecStart=/usr/bin/goaccess --real-time-html --ws-url=ws://moni.hitradex.com:80/ws -o /var/www/goaccess/index.html --port=7890 --config-file=/etc/goaccess/goaccess.conf -g --origin=http://moni.hitradex.com
+ExecStart=/usr/bin/goaccess --real-time-html --ws-url=ws://moni.hitradex.local:80/ws -o /var/www/goaccess/index.html --port=7890 --config-file=/etc/goaccess/goaccess.conf -g --origin=http://moni.hitradex.local
 ExecStop=/bin/kill -9 ${MAINPID}
 WorkingDirectory=/tmp
 
@@ -71,7 +71,7 @@ hl-header true
 no-query-string true
 EOF
     systemctl start goaccess
-    systemctl status goaccess
+    systemctl --no-pager status goaccess
     
     echo "complete successfully"
 }

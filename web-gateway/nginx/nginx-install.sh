@@ -23,7 +23,7 @@ option_install_nginx() {
     echo "========= INSTALL NGINX ============"
 
     yum update
-    yum install yum-utils
+    yum install -y yum-utils
 
     cat <<EOL > /etc/yum.repos.d/nginx.repo
 [nginx-stable]
