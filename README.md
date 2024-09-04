@@ -2,9 +2,9 @@
 HiTradeX Helper Scripts
 
 ## Web-Gateway Installer
-- Download script:
+- Download scripts:
 ```bash
-wget -qO- https://github.com/ts-dstws/hitradex-helper-scripts/archive/refs/tags/v1.0.0.tar.gz | tar xz
+wget -q https://github.com/ts-dstws/hitradex-helper-scripts/archive/refs/heads/main.zip && unzip main.zip && rm -f main.zip
 ```
 
 ## Helper Tools
