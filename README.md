@@ -9,6 +9,9 @@ HiTradeX Helper Scripts
 
 ## Helper Tools
 - Nginx
+  ```
+  N/A
+  ```
 - Goaccess
   ```bash
   bash -c "$(wget -qLO - https://raw.githubusercontent.com/ts-dstws/hitradex-helper-scripts/main/web-gateway/goaccess/goaccess-install.sh)"
