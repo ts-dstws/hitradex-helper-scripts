@@ -128,9 +128,9 @@ option_exit() {
 }
 
 clear
-show_title
 # Menu loop
 while true; do
+  show_title
   echo "Please select an option:"
   echo "1. Install Nginx"
   echo "2. Update Nginx Configs"
@@ -146,4 +146,5 @@ while true; do
     4) option_exit;;
     *) echo "Invalid option. Please try again." ;;
   esac
+  read -p "<Press any key to continue> "
 done
