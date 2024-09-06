@@ -22,8 +22,16 @@ function run_with_sudo() {
 option_install_goaccess() {
     echo "========= INSTALL GOACCESS ============"
 
-    subscription-manager repos --enable codeready-builder-for-rhel-8-$(arch)-rpms
-    yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+    source /etc/os-release
+    case "$ID" in
+        rhel)
+            subscription-manager repos --enable codeready-builder-for-rhel-8-$(arch)-rpms
+            yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+            ;;
+        almalinux)
+            ;;
+    esac
+
     yum install -y goaccess
     mkdir -p /var/www/goaccess
     chcon -R -t httpd_sys_content_t /var/www/goaccess
