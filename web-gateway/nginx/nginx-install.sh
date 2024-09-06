@@ -21,6 +21,13 @@ function run_with_sudo() {
 
 option_install_nginx() {
     echo "========= INSTALL NGINX ============"
+    # Check the user's response
+    read -p "Are you sure you want to proceed? (y/n): " response
+    if [[ "$response" != "y" && "$response" != "Y" ]]; then
+        echo "Cancelled!"
+        return
+    fi
+
 
     yum update
     yum install -y yum-utils
@@ -66,10 +73,23 @@ EOL
 
 option_update_nginx_config() {
     echo "========= UPDATE NGINX CONFIG ============"
+    # Check the user's response
+    read -p "Are you sure you want to proceed? (y/n): " response
+    if [[ "$response" != "y" && "$response" != "Y" ]]; then
+        echo "Cancelled!"
+        return
+    fi
+
     cp nginx.conf /etc/nginx/
-    cp ./conf.d/*.conf /etc/nginx/conf.d/
     mkdir -p /etc/nginx/cert
     cp ./cert/* /etc/nginx/cert
+    source ./env.sh
+    cp ./conf.d/default.conf /etc/nginx/conf.d/
+    cp ./conf.d/monitor.conf /etc/nginx/conf.d/
+    #cp ./conf.d/hitradex.conf /etc/nginx/conf.d/
+    envsubst \
+    ' ${SERVER_NAMES} ${BACKEND_SERVERS} ${FRONTEND_SERVERS} ${FILE_CERT_CRT} ${FILE_CERT_KEY} ${BACKEND_SCHEME} ${FRONTEND_SCHEME} ' \
+    < ./conf.d/hitradex.template.conf > /etc/nginx/conf.d/hitradex.conf
 
     nginx -t
     if [ $? != 0 ];
@@ -85,6 +105,13 @@ option_update_nginx_config() {
 
 option_uninstall_nginx() {
     echo "========= UNINSTALL NGINX ============"
+    # Check the user's response
+    read -p "Are you sure you want to proceed? (y/n): " response
+    if [[ "$response" != "y" && "$response" != "Y" ]]; then
+        echo "Cancelled!"
+        return
+    fi
+
     systemctl disable nginx
     systemctl stop nginx
     yum remove -y nginx
