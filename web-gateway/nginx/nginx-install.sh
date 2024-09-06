@@ -116,6 +116,7 @@ option_uninstall_nginx() {
     systemctl stop nginx
     yum remove -y nginx
     rm -rf /var/log/nginx
+    rm -rf /var/cache/nginx
     rm -rf /etc/nginx
 
     echo "complete successfully"
