@@ -1,7 +1,0 @@
-export SERVER_NAMES="hitradex.com hitradex.local 127.0.0.1"
-export BACKEND_SERVERS="server back1.hitradex.com; server back2.hitradex.com;"
-export FRONTEND_SERVERS="server front1.hitradex.com; server front2.hitradex.com;"
-export FILE_CERT_CRT="hitradex.com.crt"
-export FILE_CERT_KEY="hitradex.com.key"
-export BACKEND_SCHEME="http"
-export FRONTEND_SCHEME="http"

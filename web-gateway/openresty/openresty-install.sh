@@ -75,17 +75,15 @@ option_update_openresty_config() {
 
     mkdir -p /var/log/nginx
 
-    cp nginx.conf /usr/local/openresty/nginx/conf/
-    mkdir -p /usr/local/openresty/nginx/conf/cert
-    cp ./cert/* /usr/local/openresty/nginx/conf/cert/
-    source ./env.sh
+    bash openresty-genconf.sh
     mkdir -p /usr/local/openresty/nginx/conf/conf.d
-    cp ./conf.d/default.conf /usr/local/openresty/nginx/conf/conf.d/
-    cp ./conf.d/monitor.conf /usr/local/openresty/nginx/conf/conf.d/
-    #cp ./conf.d/hitradex.conf /usr/local/openresty/nginx/conf/conf.d/
-    envsubst \
-    ' ${SERVER_NAMES} ${BACKEND_SERVERS} ${FRONTEND_SERVERS} ${FILE_CERT_CRT} ${FILE_CERT_KEY} ${BACKEND_SCHEME} ${FRONTEND_SCHEME} ' \
-    < ./conf.d/hitradex.template.conf > /usr/local/openresty/nginx/conf/conf.d/hitradex.conf
+    cp ./genconf.d/nginx.conf /usr/local/openresty/nginx/conf/
+    cp ./genconf.d/conf.d/*.conf /usr/local/openresty/nginx/conf/conf.d/
+    cp ./genconf.d/conf.d/*.lua /usr/local/openresty/nginx/conf/conf.d/
+
+    mkdir -p /usr/local/openresty/nginx/conf/cert
+    cp ./vhost/*.key /usr/local/openresty/nginx/conf/cert/
+    cp ./vhost/*.crt /usr/local/openresty/nginx/conf/cert/
 
     openresty -t
     if [ $? != 0 ];
