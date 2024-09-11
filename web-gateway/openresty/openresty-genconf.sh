@@ -20,6 +20,7 @@ KEYS="'
 \${US_PREFIX_FRONTEND} \
 \${US_URL_HEALTH_BACKEND} \
 \${US_URL_HEALTH_FRONTEND} \
+\${NGINX_LOG_PATH} \
 '"
 
 source ./template/default.env
