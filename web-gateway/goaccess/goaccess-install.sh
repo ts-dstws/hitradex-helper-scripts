@@ -21,6 +21,12 @@ function run_with_sudo() {
 
 option_install_goaccess() {
     echo "========= INSTALL GOACCESS ============"
+    # Check the user's response
+    read -p "Are you sure you want to proceed? (y/n): " response
+    if [[ "$response" != "y" && "$response" != "Y" ]]; then
+        echo "Cancelled!"
+        return
+    fi
 
     source /etc/os-release
     case "$ID" in
@@ -60,6 +66,12 @@ EOF
 
 option_update_goaccess_config() {
     echo "========= UPDATE GOACCESS CONFIG ============"
+    # Check the user's response
+    read -p "Are you sure you want to proceed? (y/n): " response
+    if [[ "$response" != "y" && "$response" != "Y" ]]; then
+        echo "Cancelled!"
+        return
+    fi
 
     systemctl stop goaccess
     cat <<'EOF' > /etc/goaccess/goaccess.conf
@@ -86,6 +98,12 @@ EOF
 
 option_uninstall_goaccess() {
     echo "========= UNINSTALL GOACCESS ============"
+    # Check the user's response
+    read -p "Are you sure you want to proceed? (y/n): " response
+    if [[ "$response" != "y" && "$response" != "Y" ]]; then
+        echo "Cancelled!"
+        return
+    fi
     systemctl stop goaccess
     systemctl disable goaccess
     yum remove -y goaccess

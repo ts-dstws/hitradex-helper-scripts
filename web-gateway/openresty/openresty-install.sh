@@ -29,7 +29,7 @@ option_install_openresty() {
     fi
 
 
-    yum update
+    yum update -y
     yum install -y yum-utils
 
     source /etc/os-release
@@ -44,7 +44,7 @@ option_install_openresty() {
             ;;
     esac
 
-    yum update
+    yum update -y
     yum install -y openresty
 
     # Linux SE
@@ -79,7 +79,6 @@ option_install_openresty() {
     endscript
 }
 EOF
-    cp ./logrotate.d/openresty /etc/logrotate.d/
 
     echo "complete successfully"
 }
