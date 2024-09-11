@@ -61,6 +61,26 @@ option_install_openresty() {
     systemctl start openresty
     systemctl enable openresty
 
+    #
+    echo "Patch logrotate config: "
+    cat <<'EOF' > /etc/logrotate.d/openresty
+/var/log/nginx/*.log {
+    daily
+    missingok
+    rotate 14
+    compress
+    delaycompress
+    notifempty
+    sharedscripts
+    dateext
+    dateformat -%Y%m%d
+    postrotate
+        /usr/local/openresty/nginx/sbin/nginx -s reopen
+    endscript
+}
+EOF
+    cp ./logrotate.d/openresty /etc/logrotate.d/
+
     echo "complete successfully"
 }
 
@@ -111,6 +131,7 @@ option_uninstall_openresty() {
     yum remove -y openresry
     rm -rf /user/local/openresty
     rm -rf /var/log/nginx
+    rm -f /etc/logrotate.d/openresty
 
     echo "complete successfully"
 }
