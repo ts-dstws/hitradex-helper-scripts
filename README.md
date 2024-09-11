@@ -8,11 +8,17 @@ HiTradeX Helper Scripts
   ```
 
 ## Helper Tools
-- Nginx
+- Openresty
   ```
-  N/A
+  cd web-gateway/openresty/
+  bash openresty-install.sh
   ```
 - Goaccess
+  ```
+  cd web-gateway/goaccess/
+  bash goaccess-install.sh
+  ```
+  Or
   ```bash
   bash -c "$(wget -qLO - https://raw.githubusercontent.com/ts-dstws/hitradex-helper-scripts/main/web-gateway/goaccess/goaccess-install.sh)"
   ```
