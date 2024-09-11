@@ -128,8 +128,8 @@ option_uninstall_openresty() {
 
     systemctl disable openresty
     systemctl stop openresty
-    yum remove -y openresry
-    rm -rf /user/local/openresty
+    yum remove -y openresty
+    rm -rf /usr/local/openresty
     rm -rf /var/log/nginx
     rm -f /etc/logrotate.d/openresty
 
