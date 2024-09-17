@@ -45,11 +45,13 @@
     BACKEND_SERVERS="
         server 10.20.30.40:8080;
         server 10.20.30.41:8080;
-    "; export BACKEND_SERVERS=$BACKEND_SERVERS # List of EGW Servers
+    "
+    export BACKEND_SERVERS=$BACKEND_SERVERS # List of EGW Servers
     FRONTEND_SERVERS="
         server 10.20.30.40:8080;
         server 10.20.30.41:8080;
-    "; export FRONTEND_SERVERS=$FRONTEND_SERVERS # List of EGW Frontend Servers
+    "
+    export FRONTEND_SERVERS=$FRONTEND_SERVERS # List of EGW Frontend Servers
     ...
   ```
 
