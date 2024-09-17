@@ -1,14 +1,13 @@
 # hitradex-helper-scripts
-HiTradeX Helper Scripts
 
-## Web-Gateway Installer
+## Download Installer
 - Download scripts:
   ```shell
   $ wget -q https://github.com/ts-dstws/hitradex-helper-scripts/archive/refs/heads/main.zip && unzip main.zip && rm -f main.zip
   ```
 
-## Helper Tools
-- Install Openresty
+## Openresty
+### Install Openresty
   ```shell
   $ cd hitradex-helper-scripts-main/web-gateway/openresty
   $ bash openresty-install.sh
@@ -27,7 +26,7 @@ HiTradeX Helper Scripts
     Enter your choice: 1 < Enter >
   ```
 
-- Modify configuration, edit files in directory vhost
+### Modify configuration, edit files in directory vhost
   ```shell
     $ cd vhost/
     $ ls
@@ -52,10 +51,10 @@ HiTradeX Helper Scripts
         server 10.20.30.41:8080;
     "; export FRONTEND_SERVERS=$FRONTEND_SERVERS # List of EGW Frontend Servers
     ...
-    ```
+  ```
 
-- Update configuration
-  ```bash
+### Update configuration
+  ```shell
   $ bash openresty-install.sh
 
      _  _ _ _____            _    __  __
