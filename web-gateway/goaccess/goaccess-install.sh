@@ -61,6 +61,18 @@ EOF
     systemctl start goaccess
     systemctl enable goaccess
 
+    # Crontab
+    echo "Add crontab config: "
+    CRONTAB_CMD="systemctl restart goaccess"
+    CRONTAB_TIME="5 4 * * *"
+    crontab -l | grep "$CRONTAB_CMD" > /dev/null 2>&1
+    if [ $? -ne 0 ]; then
+        (crontab -l 2>/dev/null; echo "$CRONTAB_TIME $CRONTAB_CMD") | crontab -
+        echo "Cron job added: $CRONTAB_CMD at $CRONTAB_TIME"
+    else
+        echo "Cron job already added."
+    fi
+
     echo "complete successfully"
 }
 

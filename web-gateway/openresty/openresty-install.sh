@@ -61,7 +61,7 @@ option_install_openresty() {
     systemctl start openresty
     systemctl enable openresty
 
-    #
+    # Logrotate
     echo "Patch logrotate config: "
     cat <<'EOF' > /etc/logrotate.d/openresty
 /var/log/nginx/*.log {
@@ -79,6 +79,18 @@ option_install_openresty() {
     endscript
 }
 EOF
+
+    # Crontab
+    echo "Add crontab config: "
+    CRONTAB_CMD="systemctl restart openresty"
+    CRONTAB_TIME="0 4 * * *"
+    crontab -l | grep "$CRONTAB_CMD" > /dev/null 2>&1
+    if [ $? -ne 0 ]; then
+        (crontab -l 2>/dev/null; echo "$CRONTAB_TIME $CRONTAB_CMD") | crontab -
+        echo "Cron job added: $CRONTAB_CMD at $CRONTAB_TIME"
+    else
+        echo "Cron job already added."
+    fi
 
     echo "complete successfully"
 }
